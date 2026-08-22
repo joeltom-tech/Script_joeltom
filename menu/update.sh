@@ -8,7 +8,7 @@ LN='\e[34m'
 NC='\e[0m'
 GR='\e[32m'
 RD='\e[31m'
-SERVER_HOST="https://raw.githubusercontent.com/abesskamer237/KATASHIE_VPN/main"
+SERVER_HOST="https://raw.githubusercontent.com/joeltom-tech/Script_joeltom/main"
 
 echo -e "${LN}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓${NC}"
 echo -e "${LN}┃${NC} ${GR}       MISE À JOUR OTA (OVER-THE-AIR)             ${NC}${LN}┃${NC}"
