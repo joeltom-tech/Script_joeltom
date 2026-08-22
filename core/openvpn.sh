@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-#   🎩𝑱𝑶𝑬𝑳 𝑻𝑶𝑴🎩 — Installateur OpenVPN
+#   𝑱𝑶𝑬𝑳_𝑻𝑶𝑴 — Installateur OpenVPN
 #   Basé sur le script communautaire éprouvé angristan/openvpn-install
 # ============================================================
 set -e
