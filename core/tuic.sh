@@ -59,7 +59,7 @@ fi
 
 cat > /etc/systemd/system/tuic-server.service << 'EOF'
 [Unit]
-Description=KATASHIE VPN — TUIC v5 Server
+Description=𝑱𝑶𝑬𝑳 𝑻𝑶𝑴_𝑻𝑬𝑪𝑯 — TUIC v5 Server
 After=network.target
 
 [Service]
