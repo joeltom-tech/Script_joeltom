@@ -3,7 +3,7 @@ RED='[31m'
 GREEN='[32m'
 BLUE='[34m'
 NC='[0m'
-export SERVER_HOST="https://raw.githubusercontent.com/joeltom-tech/𝑱𝑶𝑬𝑳_𝑻𝑶𝑴/main"
+export SERVER_HOST="https://raw.githubusercontent.com/joeltom-tech/Script_joeltom/main"
 update_system() {
 echo -e "${BLUE}Updating server...${NC}"
 sudo apt-get update && sudo apt-get upgrade -y
