@@ -1,1 +1,19 @@
+# Dépendances
+node_modules/
+**/node_modules/
+
+# Fichiers compilés
+dist/
+**/dist/
+
+# Vite
+.vite/
+**/.vite/
+
+# Environnement
+.env
+.env.*
+
+# Logs
+*.log
 
