@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-#  Menu 18 — Nexus Tunnel Web
+#  Menu 18 — Tom Tunnel Web
 #  Manages the Nexus Tunnel Web panel from terminal.
 # ============================================================
 
@@ -60,7 +60,7 @@ INSTALL_SH="$NEXUS_WEB_DIR/install.sh"
 # BUG FIX: pointait vers un dépôt tiers non lié au projet (RootNexTPro/nexTPro-ScriptAll),
 # ce qui forçait git à demander des identifiants GitHub et échouait toujours
 # ("Source install script not found"). Corrigé vers le dépôt officiel KATASHIE VPN.
-NEXUS_REPO_URL="https://github.com/abesskamer237/KATASHIE_VPN.git"
+NEXUS_REPO_URL="https://github.com/joeltom-tech/Script_joeltom.git"
 TMP_WEB_SRC="/tmp/nexus-web-src-$$"
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
