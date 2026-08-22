@@ -1,12 +1,12 @@
 #!/bin/bash
 # ============================================================
-#   KATASHIE VPN — Menu WireGuard
+#   𝑱𝑶𝑬𝑳_𝑻𝑶𝑴 — Menu WireGuard
 #   Délègue la gestion des clients au script communautaire
 #   angristan/wireguard-install (installé par core/wireguard.sh),
 #   dont le menu interactif gère déjà add/list/revoke proprement.
 # ============================================================
 RED='\033[0;31m'; BLUE='\033[0;34m'; GREEN='\033[0;32m'; NC='\033[0m'
-SERVER_HOST="${SERVER_HOST:-https://raw.githubusercontent.com/abesskamer237/KATASHIE_VPN/main}"
+SERVER_HOST="${SERVER_HOST:-https://raw.githubusercontent.com/joeltom-tech/Script_joeltom/main}"
 TOOL="/etc/katashie/tools/wireguard-install.sh"
 
 if [ ! -f "$TOOL" ] || ! command -v wg >/dev/null 2>&1; then
@@ -19,6 +19,6 @@ echo -e "${GREEN}Ouverture du gestionnaire WireGuard (ajouter/lister/révoquer u
 sleep 1
 bash "$TOOL"
 echo ""
-read -n 1 -s -r -p " Appuyez sur une touche pour revenir au menu KATASHIE..."
+read -n 1 -s -r -p " Appuyez sur une touche pour revenir au menu 𝑱𝑶𝑬𝑳_𝑻𝑶𝑴..."
 clear
 menu
