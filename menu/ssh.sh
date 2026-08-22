@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-#   KATASHIE VPN — Menu SSH/WS
+#   𝑱𝑶𝑬𝑳_𝑻𝑶𝑴 — Menu SSH/WS
 # ============================================================
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [ -f "$SCRIPT_DIR/ui.sh" ]; then
