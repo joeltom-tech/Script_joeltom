@@ -1,6 +1,6 @@
 #!/bin/bash
 clear
-# Variables de couleurs du Nexus Tunnel Pro
+# Variables de couleurs du Tom tunnel 
 LN='\e[36m'
 NC='\e[0m'
 BG='\e[44m'
@@ -10,7 +10,7 @@ YW='\e[33m'
 WH='\e[37m'
 
 echo -e "${RD}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓${NC}"
-echo -e "${RD}┃${NC} ${WH}       DÉSINSTALLATION TOTALE : KATASHIE VPN      ${NC} ${RD}┃${NC}"
+echo -e "${RD}┃${NC} ${WH}       DÉSINSTALLATION TOTALE : 𝑱𝑶𝑬𝑳_𝑻𝑶𝑴      ${NC} ${RD}┃${NC}"
 echo -e "${RD}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛${NC}"
 echo -e ""
 echo -e " ${YW}⚠️ ATTENTION : Cette action est IRRÉVERSIBLE.${NC}"
