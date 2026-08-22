@@ -152,7 +152,7 @@ echo -e "${LN}║${NC}  ${msg}"
 echo -e "${LN}║${NC}"
 echo -e "${LN}║${NC}  📡 ${WH}Current Status :${NC} ${ipv6_status}"
 echo -e "${LN}║${NC}"
-echo -e "${LN}║${NC}  🚀 AutoScript Xray by 🜲 DOTYWRT V1.0"
+echo -e "${LN}║${NC}  🚀 AutoScript Xray by 𝑱𝑶𝑬𝑳_𝑻𝑶𝑴 V1.0"
 echo -e "${LN}║${NC}"
 echo -e "${LN}╚════════════════════════════════════════════════════════════╝${NC}"
 
