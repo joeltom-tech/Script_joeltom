@@ -1,12 +1,12 @@
 #!/bin/bash
 # ============================================================
-#   KATASHIE VPN — Menu TUIC v5
+#   𝑱𝑶𝑬𝑳_𝑻𝑶𝑴 — Menu TUIC v5
 # ============================================================
 RED='\033[0;31m'; BLUE='\033[0;34m'; GREEN='\033[0;32m'
 WHITE='\033[0;37m'; BG_BLUE='\033[44m'; CYAN='\033[0;36m'; NC='\033[0m'
 export DOMAIN=$(cat /etc/xray/domain 2>/dev/null || curl -s4 ifconfig.co)
 CONFIG="/etc/tuic/config.json"
-SERVER_HOST="${SERVER_HOST:-https://raw.githubusercontent.com/abesskamer237/KATASHIE_VPN/main}"
+SERVER_HOST="${SERVER_HOST:-https://raw.githubusercontent.com/joeltom-tech/Script_joeltom/main}"
 
 ensure_installed() {
   if ! systemctl list-unit-files | grep -q '^tuic-server.service'; then
@@ -19,7 +19,7 @@ ensure_installed() {
 function add_tuic() {
   clear
   echo -e "${BLUE}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓${NC}"
-  echo -e "${BLUE}┃${NC} ${BG_BLUE}        CRÉER UN COMPTE TUIC — KATASHIE          ${NC} ${BLUE}┃${NC}"
+  echo -e "${BLUE}┃${NC} ${BG_BLUE}        CRÉER UN COMPTE TUIC — 𝑱𝑶𝑬𝑳_𝑻𝑶𝑴          ${NC} ${BLUE}┃${NC}"
   echo -e "${BLUE}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛${NC}"
   echo ""
   read -rp "  Nom d'utilisateur : " user
