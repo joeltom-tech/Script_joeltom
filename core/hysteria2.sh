@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-#   🎩𝑱𝑶𝑬𝑳 𝑻𝑶𝑴🎩 — Installateur Hysteria2 (QUIC/UDP, très rapide)
+#   𝑱𝑶𝑬𝑳_𝑻𝑶𝑴 — Installateur Hysteria2 (QUIC/UDP, très rapide)
 # ============================================================
 set -e
 export DEBIAN_FRONTEND=noninteractive
