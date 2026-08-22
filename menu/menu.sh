@@ -1,0 +1,349 @@
+#!/bin/bash
+# ============================================================
+#   𝑱𝑶𝑬𝑳_𝑻𝑶𝑴 — Menu Principal
+#   Remplace: menu.sh (mrtom)
+# ============================================================
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if command -v readlink >/dev/null 2>&1; then
+    real_path=$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || true)
+    if [ -n "$real_path" ]; then
+        SCRIPT_DIR="$(cd "$(dirname "$real_path")" && pwd)"
+    fi
+fi
+resolve_repo_root() {
+    local dir
+    local candidate
+    for candidate in "$SCRIPT_DIR" "$(pwd)" "$HOME" /root /opt /usr/local/src /tmp; do
+        if [ -d "$candidate/joeltom_core_bot" ] && [ -f "$candidate/joeltom_core_bot/install.sh" ]; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+        if [ -d "$candidate/joeltom_deploy_bot" ] && [ -f "$candidate/joeltom_deploy_bot/install.sh" ]; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+        if [ -d "$candidate/joeltom_whatsapp_bot" ] && [ -f "$candidate/joeltom_whatsapp_bot/install.sh" ]; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+    done
+    for dir in "$SCRIPT_DIR" "$(pwd)"; do
+        while [ "$dir" != "/" ] && [ -n "$dir" ]; do
+            if [ -d "$dir/joeltom_core_bot" ] && [ -f "$dir/joeltom_core_bot/install.sh" ]; then
+                printf '%s\n' "$dir"
+                return 0
+            fi
+            if [ -d "$dir/joeltom_deploy_bot" ] && [ -f "$dir/joeltom_deploy_bot/install.sh" ]; then
+                printf '%s\n' "$dir"
+                return 0
+            fi
+            if [ -d "$dir/joeltom_whatsapp_bot" ] && [ -f "$dir/joeltom_whatsapp_bot/install.sh" ]; then
+                printf '%s\n' "$dir"
+                return 0
+            fi
+            dir="$(dirname "$dir")"
+        done
+    done
+    return 1
+}
+
+resolve_bot_installer() {
+    local bot_type="$1"  # joeltom_core_bot, joeltom_deploy_bot, ou joeltom_whatsapp_bot
+    local repo_root
+    
+    repo_root="$(resolve_repo_root 2>/dev/null || true)"
+    if [ -n "$repo_root" ] && [ -f "$repo_root/$bot_type/install.sh" ]; then
+        printf '%s\n' "$repo_root/$bot_type/install.sh"
+        return 0
+    fi
+    
+    # Essayer les chemins alternatifs
+    for path in "$SCRIPT_DIR/../$bot_type/install.sh" "/usr/local/sbin/$bot_type/install.sh" "/opt/$bot_type/install.sh" "/root/$bot_type/install.sh"; do
+        if [ -f "$path" ]; then
+            printf '%s\n' "$path"
+            return 0
+        fi
+    done
+    
+    # Fallback: cloner le repo GitHub
+    if command -v git >/dev/null 2>&1; then
+        local tmpdir="/tmp/katashie_$$"
+        if git clone --depth 1 https://github.com/joeltom-tech/Script_joeltom.git "$tmpdir" >/dev/null 2>&1; then
+            if [ -f "$tmpdir/$bot_type/install.sh" ]; then
+                chmod +x "$tmpdir/$bot_type/install.sh"
+                printf '%s\n' "$tmpdir/$bot_type/install.sh"
+                return 0
+            fi
+        fi
+        rm -rf "$tmpdir" 2>/dev/null || true
+    fi
+    
+    return 1
+}
+
+resolve_web_installer() {
+    # Chercher web.sh dans les emplacements courants
+    for path in "$SCRIPT_DIR/web.sh" "/usr/local/sbin/web.sh" "/usr/local/bin/web.sh" "$SCRIPT_DIR/web"; do
+        if [ -f "$path" ]; then
+            printf '%s\n' "$path"
+            return 0
+        fi
+    done
+    
+    # Si web.sh n'existe pas, cloner le repo et copier web.sh
+    if command -v git >/dev/null 2>&1; then
+        local tmpdir="/tmp/katashie_web_$$"
+        if git clone --depth 1 https://github.com/joeltom-tech/Script_joeltom.git "$tmpdir" >/dev/null 2>&1; then
+            if [ -f "$tmpdir/menu/web.sh" ]; then
+                cp "$tmpdir/menu/web.sh" /usr/local/sbin/web.sh
+                chmod +x /usr/local/sbin/web.sh
+                printf '%s\n' "/usr/local/sbin/web.sh"
+                rm -rf "$tmpdir" 2>/dev/null || true
+                return 0
+            fi
+        fi
+        rm -rf "$tmpdir" 2>/dev/null || true
+    fi
+    
+    return 1
+}
+
+cat << 'BANNER'
+```ansi
+█   █   ████   ███████   ███   █   █  
+██ ██   █   █     █    █   █  ██ ██  
+█ █ █   █   █     █    █   █  █ █ █  
+█   █   ████      █    █   █  █   █  
+█   █   █ █       █    █   █  █   █  
+█   █   █  █      █     █ █   █   █  
+█   █   █   █     █      ███   █   █  
+```
+                       MRTOM
+BANNER
+if [ -f "$SCRIPT_DIR/ui.sh" ]; then
+    source "$SCRIPT_DIR/ui.sh"
+elif [ -f "/usr/local/sbin/ui.sh" ]; then
+    SCRIPT_DIR="/usr/local/sbin"
+    source "$SCRIPT_DIR/ui.sh"
+else
+    echo "Erreur : ui.sh introuvable" >&2
+    exit 1
+fi
+SCRIPT_DIR="$(resolve_script_dir)"
+
+# ─── Couleurs ────────────────────────────────────────────────
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+WHITE='\033[0;37m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+BG_BLUE='\033[44m'
+NC='\033[0m'
+
+# Compat héritage
+export LN="${BLUE}"
+export BG="${BG_BLUE}"
+export GR="${GREEN}"
+export RD="${RED}"
+
+MYIP=$(curl -sS ipv4.icanhazip.com 2>/dev/null || wget -qO- ipv4.icanhazip.com)
+readonly SERVER_HOST="https://raw.githubusercontent.com/joeltom-tech/Script_joeltom/main"
+clear
+
+domain=$(cat /etc/xray/domain 2>/dev/null || echo "N/A")
+uptime_str="$(uptime -p 2>/dev/null | cut -d ' ' -f 2-10 || echo 'N/A')"
+IPV4=$(curl -s -4 ifconfig.co 2>/dev/null || echo 'N/A')
+
+# ─── Vérification de version ──────────────────────────────────
+VERSION_FILE="/etc/joeltom/version"
+INSTALLED_VERSION=$(cat "$VERSION_FILE" 2>/dev/null || cat /etc/version 2>/dev/null || echo "2.0.0")
+LATEST_VERSION=$(curl -sS "$SERVER_HOST/version" 2>/dev/null || echo "$INSTALLED_VERSION")
+UPDATE_AVAILABLE=0
+version_greater() {
+    [ "$(printf '%s\n%s\n' "$1" "$2" | sort -V | tail -n1)" = "$1" ] && [ "$1" != "$2" ]
+}
+if version_greater "$LATEST_VERSION" "$INSTALLED_VERSION"; then
+    UPDATE_AVAILABLE=1
+    mkdir -p /usr/local/sbin
+    wget -q -O /usr/local/sbin/update "$SERVER_HOST/menu/update.sh" 2>/dev/null && chmod +x /usr/local/sbin/update
+fi
+
+# ─── Statut des services ──────────────────────────────────────
+get_status() {
+    local svc=$1
+    if systemctl is-active "$svc" >/dev/null 2>&1; then
+        echo -e "${GREEN}●RUN${NC}"
+    else
+        echo -e "${RED}○OFF${NC}"
+    fi
+}
+s_nginx=$(get_status nginx)
+s_xray=$(get_status xray)
+s_ws=$(get_status ws-stunnel)
+
+# ─── Infos OS ─────────────────────────────────────────────────
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS_NAME="$NAME $VERSION_ID"
+else
+    OS_NAME=$(uname -s)
+fi
+
+clear
+menu_header "𝑱𝑶𝑬𝑳_𝑻𝑶𝑴" "Gestion VPN • Services • Bots"
+echo -e "${MENU_CYAN}╭──────────────────────────────────────────────────╮${NC}"
+echo -e "${MENU_CYAN}│${NC} ${MENU_WHITE}OS${MENU_NC}: ${OS_NAME}    ${MENU_WHITE}IP${MENU_NC}: ${IPV4}"
+echo -e "${MENU_CYAN}│${NC} ${MENU_WHITE}Domaine${MENU_NC}: ${domain}    ${MENU_WHITE}Uptime${MENU_NC}: ${uptime_str}"
+echo -e "${MENU_CYAN}╰──────────────────────────────────────────────────╯${MENU_NC}"
+echo -e "${MENU_CYAN}╭──────────────────────────────────────────────────╮${MENU_NC}"
+echo -e "${MENU_CYAN}│${NC} ${MENU_GREEN}NGINX${MENU_NC}: [${s_nginx}]  ${MENU_GREEN}XRAY${MENU_NC}: [${s_xray}]  ${MENU_GREEN}WS${MENU_NC}: [${s_ws}]"
+echo -e "${MENU_CYAN}╰──────────────────────────────────────────────────╯${MENU_NC}"
+
+echo ""
+menu_section "PROTOCOLES VPN"
+menu_pair "01" "SSH / WebSocket" "$GREEN" "02" "VMess" "$GREEN"
+menu_pair "03" "VLESS" "$GREEN" "04" "Trojan" "$GREEN"
+menu_pair "05" "Socks" "$GREEN" "06" "ZIVPN" "$GREEN"
+
+echo ""
+menu_section "OUTILS & GESTION"
+menu_pair "07" "DNS Panel" "$CYAN" "08" "Domaine Panel" "$CYAN"
+menu_pair "09" "IPv6 Panel" "$CYAN" "10" "Statut VPS" "$CYAN"
+menu_pair "11" "NetGuard" "$CYAN" "12" "Ports VPN" "$CYAN"
+menu_pair "13" "Nettoyer Logs" "$CYAN" "14" "Fast DNS" "$CYAN"
+
+echo ""
+menu_section "BOTS & PANNEAU"
+menu_pair "15" "Bot Telegram" "$YELLOW" "16" "Bot Deploy" "$YELLOW"
+menu_pair "17" "Bot WhatsApp" "$YELLOW" "18" "Panneau Web" "$WHITE"
+
+echo ""
+menu_section "SYSTEME"
+menu_pair "88" "Redémarrer VPS" "$RED" "99" "Mise à jour" "$RED"
+menu_pair "00" "Quitter" "$WHITE" "" "" ""
+
+echo ""
+if [ "$UPDATE_AVAILABLE" -eq 1 ] 2>/dev/null; then
+    echo -e "${YELLOW}⚡ Mise à jour disponible v${LATEST_VERSION}${NC}"
+fi
+
+if [ "$UPDATE_AVAILABLE" -eq 1 ] 2>/dev/null; then
+    echo -e "${YELLOW}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓${NC}"
+    echo -e "${YELLOW}┃${NC} ${YELLOW}[99]${NC} • ⚡ MISE À JOUR DISPONIBLE (v${LATEST_VERSION})"
+    echo -e "${YELLOW}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛${NC}"
+fi
+
+echo -e "${BLUE}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓${NC}"
+echo -e "${BLUE}┃${NC} ${WHITE}Version    :${NC} ${INSTALLED_VERSION}"
+echo -e "${BLUE}┃${NC} ${WHITE}Script by  :${NC} 𝑱𝑶𝑬𝑳_𝑻𝑶𝑴 TEAM"
+echo -e "${BLUE}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛${NC}"
+echo -e "${BLUE}●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━●${NC}"
+echo ""
+read -p "  Sélectionnez une option : " opt
+echo ""
+case $opt in
+1 | 01) clear ; exec bash "$SCRIPT_DIR/ssh.sh" ;;
+2 | 02) clear ; exec bash "$SCRIPT_DIR/vmess.sh" ;;
+3 | 03) clear ; exec bash "$SCRIPT_DIR/vless.sh" ;;
+4 | 04) clear ; exec bash "$SCRIPT_DIR/trojan.sh" ;;
+5 | 05) clear ; exec bash "$SCRIPT_DIR/socks.sh" ;;
+6 | 06) clear ; exec bash "$SCRIPT_DIR/zivpn.sh" ;;
+7 | 07) clear ; exec bash "$SCRIPT_DIR/dns.sh" ;;
+8 | 08) clear ; exec bash "$SCRIPT_DIR/domain.sh" ;;
+9 | 09) clear ; exec bash "$SCRIPT_DIR/iptools.sh" ;;
+10)     clear ; exec bash "$SCRIPT_DIR/status.sh" ;;
+11)     clear ; exec bash "$SCRIPT_DIR/netguard.sh" ;;
+12)     clear ; exec bash "$SCRIPT_DIR/port.sh" ;;
+13)     clear ; exec bash "$SCRIPT_DIR/log.sh" ;;
+14)     clear ; exec bash "$SCRIPT_DIR/fastdns.sh" ;;
+15)
+        clear
+        installer="$(resolve_bot_installer joeltom_core_bot 2>/dev/null || true)"
+        if [ -n "$installer" ] && [ -x "$installer" ]; then
+            exec bash "$installer"
+        else
+            echo -e "${RED}Erreur : install.sh de Bot Telegram introuvable.${NC}"
+            echo -e "${YELLOW}Le repo GitHub n'a pas pu être cloné. Vérifiez:${NC}"
+            echo "  • La connexion Internet est OK"
+            echo "  • git est installé: command -v git"
+            echo "  • Vous pouvez le cloner manuellement:"
+            echo "    git clone https://github.com/joeltom-tech/Script_joeltom.git /root/Script_joeltom"
+            echo ""
+            sleep 3
+            exec bash "$SCRIPT_DIR/menu.sh"
+        fi
+        ;;
+16)
+        clear
+        installer="$(resolve_bot_installer joeltom_deploy_bot 2>/dev/null || true)"
+        if [ -n "$installer" ] && [ -x "$installer" ]; then
+            exec bash "$installer"
+        else
+            echo -e "${RED}Erreur : install.sh de Bot Deploy introuvable.${NC}"
+            echo -e "${YELLOW}Le repo GitHub n'a pas pu être cloné. Vérifiez:${NC}"
+            echo "  • La connexion Internet est OK"
+            echo "  • git est installé: command -v git"
+            echo "  • Vous pouvez le cloner manuellement:"
+            echo "    git clone https://github.com/joeltom-tech/Script_joeltom.git /root/Script_joeltom"
+            echo ""
+            sleep 3
+            exec bash "$SCRIPT_DIR/menu.sh"
+        fi
+        ;;
+17)
+        clear
+        installer="$(resolve_bot_installer joeltom_whatsapp_bot 2>/dev/null || true)"
+        if [ -n "$installer" ] && [ -x "$installer" ]; then
+            exec bash "$installer"
+        else
+            echo -e "${RED}Erreur : install.sh de Bot WhatsApp introuvable.${NC}"
+            echo -e "${YELLOW}Le repo GitHub n'a pas pu être cloné. Vérifiez:${NC}"
+            echo "  • La connexion Internet est OK"
+            echo "  • git est installé: command -v git"
+            echo "  • Vous pouvez le cloner manuellement:"
+            echo "    git clone https://github.com/joeltom-tech7/Script_joeltom.git /root/Script_joeltom"
+            echo ""
+            sleep 3
+            exec bash "$SCRIPT_DIR/menu.sh"
+        fi
+        ;;
+18)
+        clear
+        web_script="$(resolve_web_installer 2>/dev/null || true)"
+        if [ -n "$web_script" ] && [ -f "$web_script" ]; then
+            exec bash "$web_script"
+        else
+            echo -e "${RED}Erreur : web.sh du panneau introuvable.${NC}"
+            echo -e "${YELLOW}Le repo GitHub n'a pas pu être cloné. Vérifiez:${NC}"
+            echo "  • La connexion Internet est OK"
+            echo "  • git est installé: command -v git"
+            echo "  • Vous pouvez le cloner manuellement:"
+            echo "    git clone https://github.com/joeltom-tech/Script_joeltom.git /root/Script_joeltom"
+            echo ""
+            sleep 3
+            exec bash "$SCRIPT_DIR/menu.sh"
+        fi
+        ;;
+88)     reboot ;;
+99)
+        clear
+        if [ -x "/usr/local/sbin/update.sh" ]; then
+            exec bash "/usr/local/sbin/update.sh"
+        elif [ -x "/usr/local/sbin/update" ]; then
+            exec bash "/usr/local/sbin/update"
+        elif [ -x "$SCRIPT_DIR/update.sh" ]; then
+            exec bash "$SCRIPT_DIR/update.sh"
+        elif [ -x "$SCRIPT_DIR/update" ]; then
+            exec bash "$SCRIPT_DIR/update"
+        else
+            echo -e "${RED}Erreur : script de mise à jour introuvable.${NC}"
+            sleep 2
+            exec bash "$SCRIPT_DIR/menu.sh"
+        fi
+        ;;
+0 | 00) exit 0 ;;
+*)      clear ; exec bash "$SCRIPT_DIR/menu.sh" ;;
+esac
